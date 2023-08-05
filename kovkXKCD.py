@@ -11,7 +11,7 @@ import time
 from conditions import ConditionChecker
 
 # Create a logger for this module
-logger = logging.getLogger('kovkXKCD')
+logger = logging.getLogger('/home/KovkMolk/KovkMolk/kovkXKCD')
 logger.setLevel(logging.INFO)
 
 # Create a file handler for this logger

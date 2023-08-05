@@ -109,7 +109,7 @@ while True:
             
             
             # Wait for some time
-            time.sleep(3)
+            time.sleep(5)
             
             if any(form in message for form in forms_of_kovk):
                 # now = datetime.datetime.now()
@@ -149,7 +149,7 @@ nevede presekal/a Kovk molk \n\nKer smo pa ravno pri Kovku vam narišem trenutne
 
                 # Create a chart and send it as a photo
                 chart_filename = create_chart()
-                time.sleep(3)
+                time.sleep(5)
                 with open(f'{chart_filename}.png', 'rb') as file:
                     context.bot.send_photo(chat_id=MAIN_GROUP_CHAT_ID, photo=file)
 
