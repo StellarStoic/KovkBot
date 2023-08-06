@@ -11,6 +11,7 @@ from kovkXKCD import create_chart  # Import the create_chart function
 import time
 import warnings
 import matplotlib
+import re
 
 
 logging.basicConfig(
@@ -78,7 +79,7 @@ while True:
             
             now = datetime.datetime.now()
             elapsed_time = now - last_mention
-            if elapsed_time < datetime.timedelta(seconds=60):
+            if elapsed_time < datetime.timedelta(minutes=30):
                 # If less than 1 hour has passed since the last mention, do not respond and update the last_mention time
                 last_mention = now
                 with open('/home/KovkMolk/KovkMolk/last_mention.json', 'w') as f:
@@ -96,22 +97,15 @@ while True:
             if user == bot_username:
                 return
 
-            forms_of_kovk = ["kovk", "kovku", "kovkom", "kovka", "akovk", "nakovk", "dokovka", "nakovku", 
-                                "podkovkom", "zakovkom", "okovk", "kvok", "kovkk", "kov", "kovl", "covk", 
-                                "kvoeku", "kovkku", "kovlu", "covku", "kvoekom", "kovkkom", "kobk", "kovlom", "covkom", 
-                                "kvoeka", "kovkka", "kovla", "covka", "nakovkk", "nakov", "nakovl", "nacovk", 
-                                "dokovkka", "dokovk", "dokovla", "docovka", "nakovkku","konk", "nakovlu", "nacovku", 
-                                "podkovkomm", "podkovlom", "podcovkom", "zakovkomm", "zakovlom", "zacovkom", 
-                                "kol", "koll", "colk", "kovki", "kovko", "kovke", "nakovki", "nakovko", 
-                                "nakovke", "dokovki", "dokovko", "dokovke", "podkovki", "podkovko", "podkovku", 
-                                "zakovki", "zakovko", "zakovku", "kovl", "kouk", "kolk", "kovj", "kovm", "kov9", 
-                                "kov0", "kovp", "jolk",]
+            # Regex pattern for detecting "kovk" and its typo variants
+            kovk_typos = re.compile(r'([kicolmnj][opil90][vcbwglf][kiolmnj]|podkovkom|okovku|nakovk|dokovka|nakovku|prikovku|kovkom|kovku|kovka|nakovki|kovki)')
+            if kovk_typos.search(message):
             
             
-            # Wait for some time
-            time.sleep(5)
+                # Wait for some time
+                time.sleep(5)
             
-            if any(form in message for form in forms_of_kovk):
+
                 # now = datetime.datetime.now()
                 time_passed = now - last_mention
                 formatted_time_passed = format_timedelta(time_passed)  # Format the time passed
@@ -138,18 +132,18 @@ while True:
                     context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je natanko {formatted_time_passed} od zadnje omembe Kovka. Kar pomeni, da ste Kovk molk presegli za \
 {format_timedelta(longest_duration - old_longest_duration)} in tako zasedli mesto, ki si ga je poprej lastil @{old_longest_silence_breaker}. Čestitke 🏆 \
 \n\n Kovk molk je trajal vse od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} pa do danes \
-{longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')} \n\nZa nagrado vam pa narišem aktualne razmere iz Kovka.")
+{longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')} \n\nZa nagrado vam pa narišem še aktualne razmere iz Kovka.")
                     
                     # Comment if the record has not been broken
                 else:
                     context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je {formatted_time_passed} od zadnje omembe Kovka.\n\nKot zanimivost, najdaljši Kovk molk je trajal presenetljivih \
 {format_timedelta(old_longest_duration)}, od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} \
 pa vse tja do {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')}, ko je {longest_silence_breaker} \
-nevede presekal/a Kovk molk \n\nKer smo pa ravno pri Kovku vam narišem trenutne razmere od tam")
+nevede presekal/a Kovk molk.\n\nNo! Ker smo pa ravno pri Kovku vam narišem še trenutne razmere od tam, da me ne boste imeli za povsem neuporabnega")
 
                 # Create a chart and send it as a photo
                 chart_filename = create_chart()
-                time.sleep(5)
+                time.sleep(6)
                 with open(f'{chart_filename}.png', 'rb') as file:
                     context.bot.send_photo(chat_id=MAIN_GROUP_CHAT_ID, photo=file)
 
