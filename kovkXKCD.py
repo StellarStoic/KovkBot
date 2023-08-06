@@ -9,6 +9,11 @@ import re
 import uuid
 import time
 from conditions import ConditionChecker
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Create a logger for this module
 logger = logging.getLogger('/home/KovkMolk/KovkMolk/kovkXKCD')
@@ -32,11 +37,16 @@ with open('/home/KovkMolk/KovkMolk/comments.json') as f:
 # Suppress font warnings
 logging.getLogger('matplotlib.font_manager').disabled = True
 
+
+# Fetch the KOK_API_KEY from the environment variables
+KOK_API_KEY = os.getenv("KOK_API_KEY")
+
+
 # Parsing the data
 while True:
     try:
         # Send a GET request to the URL to fetch the HTML content.
-        url = 'https://api.kok.si/widget_app.php?key=b4d5f50ce34b6806ee9d904b2f8df2oc'
+        url = f'https://api.kok.si/widget_app.php?key={KOK_API_KEY}'
         response = requests.get(url)
         # Parse the HTML content with BeautifulSoup.
         soup = BeautifulSoup(response.text, 'html.parser')
