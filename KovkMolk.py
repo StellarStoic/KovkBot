@@ -34,14 +34,14 @@ while True:
             with open('/home/KovkMolk/KovkMolk/longest_duration.json', 'r') as f:
                 longest_duration = datetime.timedelta(seconds=json.load(f))
             with open('/home/KovkMolk/KovkMolk/last_mention.json', 'r') as f:
-                last_mention = datetime.datetime.fromisoformat(f.read())
+                last_mention = datetime.datetime.fromisoformat(f.read().strip())
             with open('/home/KovkMolk/KovkMolk/longest_silence_start.json', 'r') as f:
-                longest_silence_start = datetime.datetime.fromisoformat(f.read())
+                longest_silence_start = datetime.datetime.fromisoformat(f.read().strip())
             with open('/home/KovkMolk/KovkMolk/longest_silence_end.json', 'r') as f:
-                longest_silence_end = datetime.datetime.fromisoformat(f.read())
+                longest_silence_end = datetime.datetime.fromisoformat(f.read().strip())
             with open('/home/KovkMolk/KovkMolk/longest_silence_breaker.json', 'r') as f:
                 longest_silence_breaker = f.read()
-            with open('/home/KovkMolk/KovkMolk/old_longest_silence_breaker.json', 'r') as f:  # Load the old breaker from a file
+            with open('/home/KovkMolk/KovkMolk/old_longest_silence_breaker.json', 'r') as f:
                 old_longest_silence_breaker = f.read()
         except FileNotFoundError:
             longest_duration = datetime.timedelta()
