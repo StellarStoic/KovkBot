@@ -11,8 +11,6 @@ from kovkXKCD import create_chart  # Import the create_chart function
 import time
 import warnings
 import matplotlib
-import re
-
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -24,19 +22,13 @@ logger = logging.getLogger(__name__)
 
 warnings.filterwarnings("ignore", category=matplotlib.MatplotlibDeprecationWarning)
 
-
 load_dotenv()  # load environment variables from .env file
 TOKEN = os.getenv("TELEGRAM_TOKEN")  # get token from .env file
 SILENT_GROUP_CHAT_ID = int(os.getenv("SILENT_GROUP_CHAT_ID"))  # get silent group chat ID from .env file
 MAIN_GROUP_CHAT_ID = int(os.getenv("MAIN_GROUP_CHAT_ID"))  # get main group chat ID from .env file
 
-
 while True:
-    
     try:
-        
-
-
         # Load the longest duration, last mention, and old breaker from files
         try:
             with open('/home/KovkMolk/KovkMolk/longest_duration.json', 'r') as f:
@@ -58,7 +50,7 @@ while True:
             longest_silence_end = datetime.datetime.now()
             longest_silence_breaker = ""
             old_longest_silence_breaker = ""
-            
+
         # To keep track of the last response time
         last_response = datetime.datetime.now() - datetime.timedelta(minutes=1)
 
@@ -75,20 +67,20 @@ while True:
             global longest_silence_end
             global longest_silence_breaker
             global old_longest_silence_breaker
-            
-            
+
+
             now = datetime.datetime.now()
             elapsed_time = now - last_mention
             if elapsed_time < datetime.timedelta(minutes=30):
-                # If less than 1 hour has passed since the last mention, do not respond and update the last_mention time
+                # If less than 30 minutes has passed since the last mention, do not respond and update the last_mention time
                 last_mention = now
                 with open('/home/KovkMolk/KovkMolk/last_mention.json', 'w') as f:
                     f.write(now.isoformat())
                 return
-            
+
             message = update.effective_message.text.lower() 
             user = update.effective_user.username  # Get the username of the user who sent the message
-            
+
 
             # Get the bot's username
             bot_username = context.bot.username
@@ -97,15 +89,17 @@ while True:
             if user == bot_username:
                 return
 
-            # Regex pattern for detecting "kovk" and its typo variants
-            kovk_typos = re.compile(r'([kicolmnj][opil90][vcbwglf][kiolmnj]|podkovkom|okovku|nakovk|dokovka|nakovku|prikovku|kovkom|kovku|kovka|nakovki|kovki)')
-            if kovk_typos.search(message):
-            
-            
-                # Wait for some time
-                time.sleep(5)
-            
+            forms_of_kovk = ["kovk", "kovku", "kovkom", "kovka", "kowk", "nakovk", "dokovka", "nakovku", 
+                                "podkovkom", "zakovkom", "okovku","covk", "kovki",
+                                "covku", "kvoekom", "kovkkom", "kobk", "kovlom", "covkom", 
+                                "kvoeka", "kovko", "kovla", "covka", "nakovkk", "nakov", "nakovl", "nacovk", 
+                                "kouk"]
 
+
+            # Wait for some time
+            time.sleep(5)
+
+            if any(form in message for form in forms_of_kovk):
                 # now = datetime.datetime.now()
                 time_passed = now - last_mention
                 formatted_time_passed = format_timedelta(time_passed)  # Format the time passed
@@ -131,19 +125,19 @@ while True:
                     # Comment if the record was broken
                     context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je natanko {formatted_time_passed} od zadnje omembe Kovka. Kar pomeni, da ste Kovk molk presegli za \
 {format_timedelta(longest_duration - old_longest_duration)} in tako zasedli mesto, ki si ga je poprej lastil @{old_longest_silence_breaker}. Čestitke 🏆 \
-\n\n Kovk molk je trajal vse od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} pa do danes \
+\n\nKovk molk je trajal vse od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} pa do danes \
 {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')} \n\nZa nagrado vam pa narišem še aktualne razmere iz Kovka.")
-                    
+
                     # Comment if the record has not been broken
                 else:
                     context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je {formatted_time_passed} od zadnje omembe Kovka.\n\nKot zanimivost, najdaljši Kovk molk je trajal presenetljivih \
 {format_timedelta(old_longest_duration)}, od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} \
 pa vse tja do {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')}, ko je {longest_silence_breaker} \
-nevede presekal/a Kovk molk.\n\nNo! Ker smo pa ravno pri Kovku vam narišem še trenutne razmere od tam, da me ne boste imeli za povsem neuporabnega")
+nevede presekal/a Kovk molk \n\nKer smo pa ravno pri Kovku vam narišem še trenutne razmere od tam")
 
                 # Create a chart and send it as a photo
                 chart_filename = create_chart()
-                time.sleep(6)
+                time.sleep(3)
                 with open(f'{chart_filename}.png', 'rb') as file:
                     context.bot.send_photo(chat_id=MAIN_GROUP_CHAT_ID, photo=file)
 
@@ -161,16 +155,16 @@ nevede presekal/a Kovk molk.\n\nNo! Ker smo pa ravno pri Kovku vam narišem še 
             dispatcher = updater.dispatcher
 
             dispatcher.add_handler(MessageHandler(Filters.text & (~Filters.command), handle_message))
-            
+
             updater.start_polling()
 
             updater.idle()
 
         if __name__ == '__main__':
             main()
-            
+
         pass
-    
+
     except NetworkError as e:
         logger.error(f"Network error: {e}")
 
