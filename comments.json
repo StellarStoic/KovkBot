@@ -11,11 +11,12 @@
 
     ],
     "wrong_wind_direction": [
-        "Saj ni res, pa je! Veter je spet obrnil svoj smisel in moj friz ni več tak, kot bi moral biti.",
+        "Saj ni res, pa je! Veter je spet obrnil svoj smisel in moj friz ni več tak, kot bi moral biti",
         "Ponovno čakamo na boljše čase",
         "Veter je obrnil. Sadaj lahko kvačkaš kar od doma",
         "Kot vedno bo veter slej kot prej obrnil, ko bo ugotovil, da je nekaj pozabil",
-        "Če burje ni, pršut se ne suši"
+        "Če burje ni, pršut se ne suši",
+        "Ne skrbi, prej ali slej si bo veter premislil in ponovno zapihal v pravo smer"
 
     ],
     "constant_wind_direction": [
@@ -31,7 +32,7 @@
         "Smer vetra je tako stabilna, da se počutiš, kot da bi bil ujet v časovni zanki - vedno gre v isto smer, ne glede na okoliščine."
     ],
     "temperature_increase_33": [
-        "33°C! to je kot biti v sobi z zmajem, ki je pravkar zeksal 2 krigla pira!",
+        "33°C! to je kot biti v sobi z rigajočim zmajem, ki je ravnokar zeksal ta velik Chrigel pira!",
         "Temperatura je višja od mojega razumevanja abstraktne umetnosti.",
         "Temperatura je višja od moje sposobnosti priprave popolne omlete.",
         "Primerno eksotična temperatura za opazovanje kvantnih pojavov v jajčnem beljaku.",
@@ -47,14 +48,14 @@
         "Kot natančno kvantno vezje, veter optimizira svoje gibanje za ohranitev energetskega ravnotežja v atmosferi in dušah letalcev Kovka"
     ],
     "wind_speed_range_14_100": [
-        "Piha tako zelo, zelo, da mi je odpihnilo misel!",
+        "Piha tako zelo, zelo, da mi je odpihnilo misel, ki sem jo nameraval napisati!",
         "V tem vetru so še ptice prizemljene",
+        "Ma kakšno padalo! Za letenje bi sedaj zadostoval že dovolj močan dežnik",
         "Kaj je s tem vetrom? Piha kot da je na tekmovanju v pihanju sveč. Mu je sploh kdo povedal, da ni nobene torte?",
         "Ali ste kdaj opazili, kako veter nikoli ne piha, ko ga potrebujete? Ko je vroče, ga ni nikjer. Ko pa je mrzlo, je kot da bi se odločil, da bo postal svetovni prvak v pihanju.",
         "Kaj je s tem vetrom? Mislim, kdo mu je rekel, da mora biti tako hiter?",
-        "Če bi bil veter še malo močnejši, bi lahko začel prodajati vozovnice za brezplačne letalske vožnje. Brez letala, seveda.",
-        "Adi je pa pel...\"Saj se nikamor ne mudi, časa je še dovolj, zakaj bi s tem delal si skrbi, le enkrat se živi.\"",
-        "Adi je pa pel ...\"Saj meni se mudi, meni se mudi, meni se mudi, mudi, mudi živet! Tak je pač svet, ko dopolniš 16 let, treba je začet.\""
+        "Če bi bil veter še malo močnejši, bi lahko začel prodajati vozovnice za brezplačne letalske vožnje. Brez letala, seveda."
+
     ],
     "constant_wind_speed_range_0_2": [
         "Hitrost vetra je skoraj nič, kar je kot bi gledali atom v svojem osnovnem stanju.",
@@ -74,7 +75,7 @@
         "Smer vetra je kot Schrödingerjeva mačka, ki se ne more odločiti, ali je živa ali mrtva.",
         "Smer vetra se spreminja hitreje kot moje mnenje o ananasu na pici.",
         "Smeri vetra so kot ladja, ki pluje v vse smeri.",
-        "Vetru se je snelo. . . . . . Krmilo",
+        "Še veter ima težave z paradoksom izbire, ne mora se odločiti kam bi pihal pri vseh teh smereh!",
         "Veter očitno ne more izbrati svoje najljubše smeri, tako kot jaz ne morem izbrati svoje najljubše serije."
     ],
     "persistent_low_temperature": [

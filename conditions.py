@@ -54,8 +54,6 @@ class ConditionChecker:
         return True
 
 
-
-    
     #check_constant_wind_direction: The loop breaks after adding the first comment when the wind direction is constant over a certain period of time.
     # Method to check if the wind direction is constant over a certain period of time
     def check_constant_wind_direction(self):
@@ -118,7 +116,6 @@ class ConditionChecker:
         return True
 
 
-        
     # check_wind_speed_range_14_100: The loop breaks after adding the first comment when the wind speed is in the range of 9 - 12 m/s and wind gusts are below 12 m/s for a certain number of points.
     # Method to check if the wind speed is in the range of 14 - 100 m/s and wind gusts are below 12 m/s for a certain number of points
     def check_wind_speed_range_14_100(self, num_points=13):

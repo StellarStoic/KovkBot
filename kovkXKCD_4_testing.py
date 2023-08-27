@@ -4,6 +4,7 @@ import logging
 import json
 import random
 from conditions import ConditionChecker
+from datetime import datetime
 
 
 # x-axis = time, y-axis = temp  
@@ -152,8 +153,12 @@ with plt.xkcd():
     # Rotate x-axis labels for better visibility
     plt.xticks(rotation=45)
 
+    # Get the current date and time
+    now = datetime.now()
+    formatted_now = now.strftime('%Y-%m-%d %H:%M:%S')
+
     # Add a title to the chart
-    plt.title(('Kovk'),zorder=1)
+    plt.title(f'Kovk    {formatted_now}', zorder=1)
     # Set y-axis labels with units
     if max(temperature) < 12:
         ax1.set_ylabel('Temperatura', fontsize='x-small')

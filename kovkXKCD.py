@@ -11,6 +11,7 @@ import time
 from conditions import ConditionChecker
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 
 # Load environment variables from .env file
 load_dotenv()
@@ -37,10 +38,8 @@ with open('/home/KovkMolk/KovkMolk/comments.json') as f:
 # Suppress font warnings
 logging.getLogger('matplotlib.font_manager').disabled = True
 
-
 # Fetch the KOK_API_KEY from the environment variables
 KOK_API_KEY = os.getenv("KOK_API_KEY")
-
 
 # Parsing the data
 while True:
@@ -83,7 +82,6 @@ while True:
         # Add a small constant to the wind direction values for visualization
         wind_direction_visual = [value + 0.1 for value in wind_direction]
 
-
         # # Temperature data
         # temperature = [24.0,23.0,23.0,23.0,22.0,22.0,22.0,21.0,20.0,20.0,19.0,19.0,19.0,18.0,18.0,18.0,18.0,18.0]
         
@@ -115,7 +113,6 @@ for direction in wind_direction_labels:
 # Define the upper and lower wind speed limits
 lower_limit = 5
 upper_limit = 8
-
 
 def create_chart():
     with plt.xkcd():
@@ -208,8 +205,13 @@ def create_chart():
         # Rotate x-axis labels for better visibility
         plt.xticks(rotation=45)
 
+        # Get the current date and time
+        now = datetime.now()
+        formatted_now = now.strftime('%Y-%m-%d %H:%M:%S')
+
         # Add a title to the chart
-        plt.title(('Kovk'),zorder=1)
+        plt.title(f'Kovk    {formatted_now}', zorder=1)
+        
         # Set y-axis labels with units
         if max(temperature) < 12.9:
             ax1.set_ylabel('Temperatura', fontsize='x-small')
