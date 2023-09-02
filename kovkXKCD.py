@@ -141,7 +141,7 @@ def create_chart():
             ax2.text(i, wind_direction_visual[i], txt, ha='center', va='center', rotation=45, fontsize='x-small', zorder=1)
 
         # Plot temperature on the primary y-axis
-        line1, = ax1.plot(time, temperature, label='Temperatura', color='tab:orange', linestyle='dotted',zorder=1)
+        line1, = ax1.plot(time, temperature, label='Temperatura', color='lightgrey', linestyle='dotted',zorder=1)
 
         # Plot wind speed on the secondary y-axis
         line2, = ax2.plot(time, wind_speed, label='Hitrost vetra', color='tab:blue', zorder=1)
@@ -213,13 +213,16 @@ def create_chart():
         plt.title(f'Kovk    {formatted_now}', zorder=1)
         
         # Set y-axis labels with units
-        if max(temperature) < 12.9:
-            ax1.set_ylabel('Temperatura', fontsize='x-small')
+        if max(temperature) < 0:
+            ax1.set_ylabel('Matr je mrz!', fontsize='x-small')
         elif min(temperature) > 18:
-            ax1.set_ylabel('Temperatura', fontsize='x-small')
+            ax1.set_ylabel('°C', fontsize='x-small')
         else:
-            ax1.set_ylabel('Temperatura', fontsize='x-small', zorder=1)
+            ax1.set_ylabel('°C', fontsize='x-small', zorder=1)
         ax2.set_ylabel('m/s', fontsize='x-small')
+        
+        ax1.tick_params(axis='y', labelsize='x-small', labelcolor='lightgrey')  # Update font size and color for temperature here
+        ax2.tick_params(axis='y', labelsize='medium', labelcolor='black')  # Update font size and color for wind speed here
         
 
         # Save the plot as an image
