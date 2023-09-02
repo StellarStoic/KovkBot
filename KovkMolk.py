@@ -89,7 +89,7 @@ def handle_message(update: Update, context: CallbackContext):
                         "podkovkom", "zakovkom", "okovku","covk", "kovki", "kovc", "cowk", "cowku",
                         "covku", "kvoekom", "kovkkom", "kobk", "kovlom", "covkom", "kowku", 
                         "kvoeka", "kovko", "kovla", "covka", "nakov", "nakovl", "nacovk", "jovk", 
-                        "kouk"]
+                        "kouk", "kvok", "kwok", "kvoku", "kwoku"]
 
     # Wait for some time
     time.sleep(2)
@@ -159,9 +159,9 @@ def handle_message(update: Update, context: CallbackContext):
 
             
             # Comment if the record was broken
-            context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je natanko {formatted_time_passed} odkar je {pre_last_mentioner} nazadnje presekal/a Kovk molk. Po zelo dolgem času si to nevede storil/a tudi ti @{last_mentioner}. Kovk molk je bil presežen za \
-{format_timedelta(longest_duration - old_longest_duration)} tako, da sedaj @{last_mentioner} zaseda mesto podiralca rekordov Kovk molka, katerega si je poprej lastil/a @{old_longest_silence_breaker}. \
-Čestitke za ta za nas skrajno nepomemben dosežek a dovolj pomemben za @{last_mentioner}, saj bo sedaj vedno, ko se v KLVjata omeni Kovk, bo v avtomatskem sporočilu omenjen tudi podiralec rekorda. 🏆 \
+            context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je natanko {formatted_time_passed} odkar je {pre_last_mentioner} nazadnje presekal/a Kovk molk. Po zelo dolgem času je sedaj to nevede storil/a tudi {last_mentioner}. Kovk molk je bil presežen za \
+{format_timedelta(longest_duration - old_longest_duration)} tako, da sedaj {last_mentioner} zaseda mesto podiralca rekordov Kovk molka, katerega si je poprej lastil/a {old_longest_silence_breaker}. \
+Čestitke za ta za vse nas skrajno nepomemben dosežek. 🏆 \
 \n\nKovk molk je trajal vse od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} pa do danes \
 {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')} \n\nSeveda pa kot vedno, nagrada sledi v slikovni prezentaciji stanja zračne mase na Kovku")
 
@@ -169,7 +169,7 @@ def handle_message(update: Update, context: CallbackContext):
         else:
             context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je točno {formatted_time_passed} odkar je {pre_last_mentioner} presekal/a Kovk molk.\n\nKot zanimivost, najdaljši Kovk molk je trajal presenetljivih \
 {format_timedelta(old_longest_duration)}, od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} \
-pa vse tja do {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')}, ko je @{longest_silence_breaker} \
+pa vse tja do {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')}, ko je {longest_silence_breaker} \
 nevede presekal/a Kovk molk \n\nStanje zračne mase na kovku je pa trenutno takšno...")
 
         # Create a chart and send it as a photo
