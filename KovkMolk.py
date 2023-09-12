@@ -184,7 +184,7 @@ nevede presekal/a Kovk molk \n\nStanje zraƒçne mase na kovku je pa trenutno tak≈
             logger.error(f"I/O error({e.errno}): {e.strerror}")
         except Exception as e:
             logger.error(f"Unexpected error: {e}")
-            logger.error(traceback.format_exc())  # This will print the stack trace to your log   
+            logger.error(traceback.format_exc())
 
 def main():
     updater = Updater(token=TOKEN, use_context=True)

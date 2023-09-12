@@ -13,15 +13,13 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime
 
-# Load environment variables from .env file
-load_dotenv()
 
 # Create a logger for this module
-logger = logging.getLogger('/home/KovkMolk/KovkMolk/kovkXKCD')
+logger = logging.getLogger('kovkXKCD')
 logger.setLevel(logging.INFO)
 
 # Create a file handler for this logger
-fh = logging.FileHandler('/home/KovkMolk/KovkMolk/parser.log')
+fh = logging.FileHandler('parser.log')
 fh.setLevel(logging.INFO)
 
 # Create a formatter and add it to the handler
@@ -32,14 +30,18 @@ fh.setFormatter(formatter)
 logger.addHandler(fh)
 
 # Load the comments from the JSON file
-with open('/home/KovkMolk/KovkMolk/comments.json') as f:
+with open('comments.json') as f:
     comments = json.load(f)
     
 # Suppress font warnings
 logging.getLogger('matplotlib.font_manager').disabled = True
 
+# Load environment variables from .env file
+load_dotenv()
+
 # Fetch the KOK_API_KEY from the environment variables
 KOK_API_KEY = os.getenv("KOK_API_KEY")
+
 
 # Parsing the data
 while True:
@@ -82,6 +84,7 @@ while True:
         # Add a small constant to the wind direction values for visualization
         wind_direction_visual = [value + 0.1 for value in wind_direction]
 
+
         # # Temperature data
         # temperature = [24.0,23.0,23.0,23.0,22.0,22.0,22.0,21.0,20.0,20.0,19.0,19.0,19.0,18.0,18.0,18.0,18.0,18.0]
         
@@ -114,135 +117,141 @@ for direction in wind_direction_labels:
 lower_limit = 5
 upper_limit = 8
 
+
 def create_chart():
-    with plt.xkcd():
-        fig, ax1 = plt.subplots()
+    try:
+        with plt.xkcd():
+            fig, ax1 = plt.subplots()
 
 
-        # Create a secondary y-axis for the wind direction
-        ax2 = ax1.twinx()
+            # Create a secondary y-axis for the wind direction
+            ax2 = ax1.twinx()
 
-        # Initialize the condition checker
-        checker = ConditionChecker(wind_speed, temperature, wind_direction, comments, wind_gusts, colors, ax1, ax2)
+            # Initialize the condition checker
+            checker = ConditionChecker(wind_speed, temperature, wind_direction, comments, wind_gusts, colors, ax1, ax2)
 
-        # Check conditions
-        checker.check_conditions()
+            # Check conditions
+            checker.check_conditions()
 
-        # Add horizontal lines for soaring limits
-        ax2.axhline(y=lower_limit, color='green', linestyle='--', zorder=1)
-        ax2.axhline(y=upper_limit, color='red', linestyle='--', zorder=1)
+            # Add horizontal lines for soaring limits
+            ax2.axhline(y=lower_limit, color='green', linestyle='--', zorder=1)
+            ax2.axhline(y=upper_limit, color='red', linestyle='--', zorder=1)
 
-        # Fill the space between the soaring limits lines
-        ax2.fill_between(time, lower_limit, upper_limit, color='mediumspringgreen', alpha=0.1) 
+            # Fill the space between the soaring limits lines
+            ax2.fill_between(time, lower_limit, upper_limit, color='mediumspringgreen', alpha=0.1) 
 
-        # Plot wind direction as a bar chart on the secondary y-axis with the colors
-        ax2.bar(time, wind_direction_visual, alpha=0.1, color=colors, label='Wind Direction')
-        for i, txt in enumerate(wind_direction_labels):
-            ax2.text(i, wind_direction_visual[i], txt, ha='center', va='center', rotation=45, fontsize='x-small', zorder=1)
+            # Plot wind direction as a bar chart on the secondary y-axis with the colors
+            ax2.bar(time, wind_direction_visual, alpha=0.1, color=colors, label='Wind Direction')
+            for i, txt in enumerate(wind_direction_labels):
+                ax2.text(i, wind_direction_visual[i], txt, ha='center', va='center', rotation=45, fontsize='x-small', zorder=1)
 
-        # Plot temperature on the primary y-axis
-        line1, = ax1.plot(time, temperature, label='Temperatura', color='lightgrey', linestyle='dotted',zorder=1)
+            # Plot temperature on the primary y-axis
+            line1, = ax1.plot(time, temperature, label='Temperatura', color='lightgrey', linestyle='dotted',zorder=1)
 
-        # Plot wind speed on the secondary y-axis
-        line2, = ax2.plot(time, wind_speed, label='Hitrost vetra', color='tab:blue', zorder=1)
+            # Plot wind speed on the secondary y-axis
+            line2, = ax2.plot(time, wind_speed, label='Hitrost vetra', color='tab:blue', zorder=1)
 
-        # Plot wind gusts on the secondary y-axis
-        line3, = ax2.plot(time, wind_gusts, label='Sunki vetra', color='tab:red', linestyle=(0,(5,1)), zorder=1)
-
-
+            # Plot wind gusts on the secondary y-axis
+            line3, = ax2.plot(time, wind_gusts, label='Sunki vetra', color='tab:red', linestyle=(0,(5,1)), zorder=1)
 
 
-        # Define lines here before using it in the loop
-        lines = [line1, line2, line3]
 
-        # Add values at the beginning and end of the lines
-        for i, line in enumerate(lines):
-            # Get the data for the line
-            xdata = line.get_xdata()
-            ydata = line.get_ydata()
 
-            # Define the offset
-            offset = i * 0.4
+            # Define lines here before using it in the loop
+            lines = [line1, line2, line3]
 
-            # Add text at the beginning of the line if it's unique
-            if ydata[0] not in [l.get_ydata()[0] for l in lines if l != line]:
-                if ydata[0] < ydata[-1]:
-                    if line == line1:
-                        ax1.text(xdata[0], ydata[0] + offset, f'{ydata[0]:.1f}', color=line.get_color(), verticalalignment='top', fontsize='x-small')
+            # Add values at the beginning and end of the lines
+            for i, line in enumerate(lines):
+                # Get the data for the line
+                xdata = line.get_xdata()
+                ydata = line.get_ydata()
+
+                # Define the offset
+                offset = i * 0.4
+
+                # Add text at the beginning of the line if it's unique
+                if ydata[0] not in [l.get_ydata()[0] for l in lines if l != line]:
+                    if ydata[0] < ydata[-1]:
+                        if line == line1:
+                            ax1.text(xdata[0], ydata[0] + offset, f'{ydata[0]:.1f}', color=line.get_color(), verticalalignment='top', fontsize='x-small')
+                        else:
+                            ax2.text(xdata[0], ydata[0] + offset, f'{ydata[0]:.1f}', color=line.get_color(), verticalalignment='top', fontsize='x-small')
                     else:
-                        ax2.text(xdata[0], ydata[0] + offset, f'{ydata[0]:.1f}', color=line.get_color(), verticalalignment='top', fontsize='x-small')
-                else:
-                    if line == line1:
-                        ax1.text(xdata[0], ydata[0] + offset, f'{ydata[0]:.1f}', color=line.get_color(), verticalalignment='bottom', fontsize='x-small')
+                        if line == line1:
+                            ax1.text(xdata[0], ydata[0] + offset, f'{ydata[0]:.1f}', color=line.get_color(), verticalalignment='bottom', fontsize='x-small')
+                        else:
+                            ax2.text(xdata[0], ydata[0] + offset, f'{ydata[0]:.1f}', color=line.get_color(), verticalalignment='bottom', fontsize='x-small')
+
+                # Add text at the end of the line if it's unique
+                if ydata[-1] not in [l.get_ydata()[-1] for l in lines if l != line]:
+                    if ydata[-1] < ydata[0]:
+                        if line == line1:
+                            ax1.text(xdata[-1], ydata[-1] + offset, f'{ydata[-1]:.1f}', color=line.get_color(), verticalalignment='top', fontsize='x-small')
+                        else:
+                            ax2.text(xdata[-1], ydata[-1] + offset, f'{ydata[-1]:.1f}', color=line.get_color(), verticalalignment='top', fontsize='x-small')
                     else:
-                        ax2.text(xdata[0], ydata[0] + offset, f'{ydata[0]:.1f}', color=line.get_color(), verticalalignment='bottom', fontsize='x-small')
+                        if line == line1:
+                            ax1.text(xdata[-1], ydata[-1] + offset, f'{ydata[-1]:.1f}', color=line.get_color(), verticalalignment='bottom', fontsize='x-small')
+                        else:
+                            ax2.text(xdata[-1], ydata[-1] + offset, f'{ydata[-1]:.1f}', color=line.get_color(), verticalalignment='bottom', fontsize='x-small')
 
-            # Add text at the end of the line if it's unique
-            if ydata[-1] not in [l.get_ydata()[-1] for l in lines if l != line]:
-                if ydata[-1] < ydata[0]:
-                    if line == line1:
-                        ax1.text(xdata[-1], ydata[-1] + offset, f'{ydata[-1]:.1f}', color=line.get_color(), verticalalignment='top', fontsize='x-small')
-                    else:
-                        ax2.text(xdata[-1], ydata[-1] + offset, f'{ydata[-1]:.1f}', color=line.get_color(), verticalalignment='top', fontsize='x-small')
-                else:
-                    if line == line1:
-                        ax1.text(xdata[-1], ydata[-1] + offset, f'{ydata[-1]:.1f}', color=line.get_color(), verticalalignment='bottom', fontsize='x-small')
-                    else:
-                        ax2.text(xdata[-1], ydata[-1] + offset, f'{ydata[-1]:.1f}', color=line.get_color(), verticalalignment='bottom', fontsize='x-small')
+            # Add a legend
+            lines = [line1, line2, line3]
+            labels = [l.get_label() for l in lines]
+            ax1.legend(lines, labels, loc='upper center', bbox_to_anchor=(0.45, -0.071), ncol=3, fontsize='xx-small')
+            # Create custom x-axis labels
+            # xticks = [t if ':01' in t or ':00' in t else '' for t in time]
+            # ax1.set_xticks(range(len(time)))
+            # ax1.set_xticklabels(xticks, fontsize='x-small')
+            xticks = [time[0], 'čas', time[-1]]
+            ax1.set_xticks([0, len(time)//2, len(time)-1])
+            ax1.set_xticklabels(xticks, fontsize='x-small')
 
-        # Add a legend
-        lines = [line1, line2, line3]
-        labels = [l.get_label() for l in lines]
-        ax1.legend(lines, labels, loc='upper center', bbox_to_anchor=(0.45, -0.071), ncol=3, fontsize='xx-small')
-        # Create custom x-axis labels
-        # xticks = [t if ':01' in t or ':00' in t else '' for t in time]
-        # ax1.set_xticks(range(len(time)))
-        # ax1.set_xticklabels(xticks, fontsize='x-small')
-        xticks = [time[0], 'čas', time[-1]]
-        ax1.set_xticks([0, len(time)//2, len(time)-1])
-        ax1.set_xticklabels(xticks, fontsize='x-small')
+            # Rotate x-axis labels for better visibility
+            plt.xticks(rotation=45)
+            
+            # Get the current date and time
+            now = datetime.now()
+            formatted_now = now.strftime('%Y-%m-%d %H:%M:%S')
 
-        # Rotate x-axis labels for better visibility
-        plt.xticks(rotation=45)
+            # Add a title to the chart
+            plt.title(f'Kovk {formatted_now}', zorder=1)
+            # Set y-axis labels with units
+            if max(temperature) < 0:
+                ax1.set_ylabel('Matr je mrz!', fontsize='x-small')
+            elif min(temperature) > 18:
+                ax1.set_ylabel('°C', fontsize='x-small')
+            else:
+                ax1.set_ylabel('°C', fontsize='x-small', zorder=1)
+            ax2.set_ylabel('m/s', fontsize='x-small')
+            
+            ax1.tick_params(axis='y', labelsize='x-small', labelcolor='lightgrey')  # Update font size and color for temperature here
+            ax2.tick_params(axis='y', labelsize='medium', labelcolor='black')  # Update font size and color for wind speed here
+            
+            # Save the plot as an image
+            filename = 'test_weather_chart_' + str(uuid.uuid4())
+            plt.tight_layout()
+            plt.savefig(filename + '.png')
 
-        # Get the current date and time
-        now = datetime.now()
-        formatted_now = now.strftime('%Y-%m-%d %H:%M:%S')
+            # Close the plot
+            plt.close()
 
-        # Add a title to the chart
-        plt.title(f'Kovk    {formatted_now}', zorder=1)
+            logger.info("A test chart was successfully drawn.")
+
+            def count_charts_drawn(log_file):
+                with open(log_file, 'r') as file:
+                    lines = file.readlines()
+                count = sum("A test chart was successfully drawn." in line for line in lines)
+                return count
+            
+            charts_drawn = count_charts_drawn("parser.log")
+            print(f"Total charts drawn: {charts_drawn}")    
+
+    except Exception as e:
+        print(f"Debug: Exception caught - {e}")
         
-        # Set y-axis labels with units
-        if max(temperature) < 0:
-            ax1.set_ylabel('Matr je mrz!', fontsize='x-small')
-        elif min(temperature) > 18:
-            ax1.set_ylabel('°C', fontsize='x-small')
-        else:
-            ax1.set_ylabel('°C', fontsize='x-small', zorder=1)
-        ax2.set_ylabel('m/s', fontsize='x-small')
-        
-        ax1.tick_params(axis='y', labelsize='x-small', labelcolor='lightgrey')  # Update font size and color for temperature here
-        ax2.tick_params(axis='y', labelsize='medium', labelcolor='black')  # Update font size and color for wind speed here
-        
-
-        # Save the plot as an image
-        filename = '/home/KovkMolk/KovkMolk/png/weather_chart_' + str(uuid.uuid4())
-        plt.tight_layout()
-        plt.savefig(filename + '.png')
-
-        # Close the plot
-        plt.close()
-
-        logger.info("A chart was successfully drawn.")
-
-        def count_charts_drawn(log_file):
-            with open(log_file, 'r') as file:
-                lines = file.readlines()
-            count = sum("A chart was successfully drawn." in line for line in lines)
-            return count
-        
-        charts_drawn = count_charts_drawn("/home/KovkMolk/KovkMolk/parser.log")
-        print(f"Total charts drawn: {charts_drawn}")    
-
-
-        return filename
+    return filename
+    
+# # Call the function for debugging
+# if __name__ == "__main__":
+#     create_chart()
