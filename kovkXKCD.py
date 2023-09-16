@@ -19,7 +19,7 @@ logger = logging.getLogger('kovkXKCD')
 logger.setLevel(logging.INFO)
 
 # Create a file handler for this logger
-fh = logging.FileHandler('parser.log')
+fh = logging.FileHandler('/home/KovkMolk/KovkMolk/parser.log')
 fh.setLevel(logging.INFO)
 
 # Create a formatter and add it to the handler
@@ -229,22 +229,20 @@ def create_chart():
             ax2.tick_params(axis='y', labelsize='medium', labelcolor='black')  # Update font size and color for wind speed here
             
             # Save the plot as an image
-            if not os.path.exists('/home/KovkMolk/KovkMolk/png'):
-                os.makedirs('/home/KovkMolk/KovkMolk/png')
-
-            filename = 'test_weather_chart_' + str(uuid.uuid4())
+            
+            filename = 'weather_data_chart_' + str(uuid.uuid4())
             plt.tight_layout()
             plt.savefig('/home/KovkMolk/KovkMolk/png/' + filename + '.png')
 
             # Close the plot
             plt.close()
 
-            logger.info("A weather data chart was successfully drawn.")
+            logger.info("A chart was successfully drawn.")
 
             def count_charts_drawn(log_file):
                 with open(log_file, 'r') as file:
                     lines = file.readlines()
-                count = sum("A weather data chart was successfully drawn." in line for line in lines)
+                count = sum("A chart was successfully drawn." in line for line in lines)
                 return count
             
             charts_drawn = count_charts_drawn("parser.log")
