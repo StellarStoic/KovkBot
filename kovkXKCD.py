@@ -43,83 +43,85 @@ load_dotenv()
 KOK_API_KEY = os.getenv("KOK_API_KEY")
 
 
-# Parsing the data
-while True:
-    try:
-        # Send a GET request to the URL to fetch the HTML content.
-        url = f'https://api.kok.si/widget_app.php?key={KOK_API_KEY}'
-        response = requests.get(url)
-        # Parse the HTML content with BeautifulSoup.
-        soup = BeautifulSoup(response.text, 'html.parser')
-        # Find the script tags in the HTML.
-        scripts = soup.find_all('script')
-        # Extract the JavaScript code from the script tags.
-        js_code = [script.string for script in scripts if script.string is not None]
-        # Use a regular expression to find the data arrays in the JavaScript code.
-        data_regex = re.compile(r'data: \[(.*?)\]')
-        data_matches = data_regex.findall(' '.join(js_code))
-        # Clean up the matches to get just the data arrays.
-        data_arrays = [[float(num) for num in match.split(',') if num] for match in data_matches]
-        # Use a regular expression to find the time arrays in the JavaScript code.
-        time_regex = re.compile(r'categories: \[(.*?)\]')
-        time_matches = time_regex.findall(' '.join(js_code))
-        # Clean up the matches to get just the time arrays.
-        time_arrays = [[time.strip("'") for time in match.split(',')] for match in time_matches]
-
-        # Assign the data arrays to variables.
-        temperature = data_arrays[3]
-        # Time data
-        time = time_arrays[0][:-1]
-        # Wind speed data
-        wind_speed = data_arrays[0]
-        # Wind gusts data
-        wind_gusts = data_arrays[1]
-        # Wind direction data
-        wind_direction = data_arrays[2]
-
-        # Map numbers to cardinal directions
-        direction_dict = {0: 'NW', 1: 'W', 2: 'SW', 3: 'S', 4: 'SE', 5: 'E', 6: 'NE', 7: 'N'}
-        wind_direction_labels = [direction_dict.get(item, item) for item in wind_direction]
-
-        # Add a small constant to the wind direction values for visualization
-        wind_direction_visual = [value + 0.1 for value in wind_direction]
-
-
-        # # Temperature data
-        # temperature = [24.0,23.0,23.0,23.0,22.0,22.0,22.0,21.0,20.0,20.0,19.0,19.0,19.0,18.0,18.0,18.0,18.0,18.0]
-        
-        # If the scraping is successful, break the loop
-        break
-    except Exception as e:
-            logger.error(f"Unable to scrape data from the API. The error message is: {e}")
-            # Optional: add a delay before trying again
-            time.sleep(10)  # wait for 60 seconds# END parsing data 
-
-# Define the flyable wind directions
-flyable = ['S', 'SW', 'W']
-unFlyable = ['N', 'NE', 'NW', 'E', 'SE']
-conditionable = []
-
-# Create a list of colors based on the wind direction labels
-colors = []
-for direction in wind_direction_labels:
-    if direction in flyable:
-        colors.append('green')
-    elif direction in unFlyable:
-        colors.append('red')
-    elif direction in conditionable:
-        colors.append('orange')
-    else:
-        colors.append('grey')  # default color
-        
-
-# Define the upper and lower wind speed limits
-lower_limit = 5
-upper_limit = 8
-
-
 def create_chart():
     try:
+        
+        
+        # Parsing the data from API
+        while True:
+            try:
+                # Send a GET request to the URL to fetch the HTML content.
+                url = f'https://api.kok.si/widget_app.php?key={KOK_API_KEY}'
+                response = requests.get(url)
+                # Parse the HTML content with BeautifulSoup.
+                soup = BeautifulSoup(response.text, 'html.parser')
+                # Find the script tags in the HTML.
+                scripts = soup.find_all('script')
+                # Extract the JavaScript code from the script tags.
+                js_code = [script.string for script in scripts if script.string is not None]
+                # Use a regular expression to find the data arrays in the JavaScript code.
+                data_regex = re.compile(r'data: \[(.*?)\]')
+                data_matches = data_regex.findall(' '.join(js_code))
+                # Clean up the matches to get just the data arrays.
+                data_arrays = [[float(num) for num in match.split(',') if num] for match in data_matches]
+                # Use a regular expression to find the time arrays in the JavaScript code.
+                time_regex = re.compile(r'categories: \[(.*?)\]')
+                time_matches = time_regex.findall(' '.join(js_code))
+                # Clean up the matches to get just the time arrays.
+                time_arrays = [[time.strip("'") for time in match.split(',')] for match in time_matches]
+
+                # Assign the data arrays to variables.
+                temperature = data_arrays[3]
+                # Time data
+                time = time_arrays[0][:-1]
+                # Wind speed data
+                wind_speed = data_arrays[0]
+                # Wind gusts data
+                wind_gusts = data_arrays[1]
+                # Wind direction data
+                wind_direction = data_arrays[2]
+
+                # Map numbers to cardinal directions
+                direction_dict = {0: 'NW', 1: 'W', 2: 'SW', 3: 'S', 4: 'SE', 5: 'E', 6: 'NE', 7: 'N'}
+                wind_direction_labels = [direction_dict.get(item, item) for item in wind_direction]
+
+                # Add a small constant to the wind direction values for visualization
+                wind_direction_visual = [value + 0.1 for value in wind_direction]
+
+
+                # # Temperature data
+                # temperature = [24.0,23.0,23.0,23.0,22.0,22.0,22.0,21.0,20.0,20.0,19.0,19.0,19.0,18.0,18.0,18.0,18.0,18.0]
+
+                # If the scraping is successful, break the loop
+                break
+            except Exception as e:
+                    logger.error(f"Unable to scrape data from the API. The error message is: {e}")
+                    # Optional: add a delay before trying again
+                    time.sleep(10)  # wait for 60 seconds# END parsing data 
+
+        # Define the flyable wind directions
+        flyable = ['S', 'SW', 'W']
+        unFlyable = ['N', 'NE', 'NW', 'E', 'SE']
+        conditionable = []
+
+        # Create a list of colors based on the wind direction labels
+        colors = []
+        for direction in wind_direction_labels:
+            if direction in flyable:
+                colors.append('green')
+            elif direction in unFlyable:
+                colors.append('red')
+            elif direction in conditionable:
+                colors.append('orange')
+            else:
+                colors.append('grey')  # default color
+
+
+        # Define the upper and lower wind speed limits
+        lower_limit = 5
+        upper_limit = 8
+
+
         with plt.xkcd():
             fig, ax1 = plt.subplots()
 
@@ -232,7 +234,7 @@ def create_chart():
             if not os.path.exists('/home/KovkMolk/KovkMolk/png'):
                 os.makedirs('/home/KovkMolk/KovkMolk/png')
 
-            filename = 'kovk_weather_chart_' + str(uuid.uuid4())
+            filename = 'Kovk_weather_chart_' + str(uuid.uuid4())
             plt.tight_layout()
             plt.savefig('/home/KovkMolk/KovkMolk/png/' + filename + '.png')
 
