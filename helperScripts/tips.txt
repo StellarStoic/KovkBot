@@ -1,0 +1,3 @@
+XKCD font can be installed on the system with 'sudo apt-get install fonts-humor-sans' <--ČŽŠĆĐ not included!!!--
+if the custom font doesn't work, try to clear matplotlib cache with 'rm -r ~/.cache/matplotlib'
+
