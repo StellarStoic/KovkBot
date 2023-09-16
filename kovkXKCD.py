@@ -29,13 +29,6 @@ fh.setFormatter(formatter)
 # Add the handler to the logger
 logger.addHandler(fh)
 
-# Load the comments from the JSON file
-with open('/home/KovkMolk/KovkMolk/comments.json') as f:
-    comments = json.load(f)
-    
-# Suppress font warnings
-logging.getLogger('matplotlib.font_manager').disabled = True
-
 # Load environment variables from .env file
 load_dotenv()
 
@@ -46,6 +39,12 @@ KOK_API_KEY = os.getenv("KOK_API_KEY")
 def create_chart():
     try:
         
+        # Load the comments from the JSON file
+        with open('/home/KovkMolk/KovkMolk/comments.json') as f:
+            comments = json.load(f)
+            
+        # Suppress font warnings
+        logging.getLogger('matplotlib.font_manager').disabled = True
         
         # Parsing the data from API
         while True:
