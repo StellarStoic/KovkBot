@@ -30,7 +30,7 @@ fh.setFormatter(formatter)
 logger.addHandler(fh)
 
 # Load the comments from the JSON file
-with open('comments.json') as f:
+with open('/home/KovkMolk/KovkMolk/comments.json') as f:
     comments = json.load(f)
     
 # Suppress font warnings
@@ -229,19 +229,22 @@ def create_chart():
             ax2.tick_params(axis='y', labelsize='medium', labelcolor='black')  # Update font size and color for wind speed here
             
             # Save the plot as an image
+            if not os.path.exists('/home/KovkMolk/KovkMolk/png'):
+                os.makedirs('/home/KovkMolk/KovkMolk/png')
+
             filename = 'test_weather_chart_' + str(uuid.uuid4())
             plt.tight_layout()
-            plt.savefig(filename + '.png')
+            plt.savefig('/home/KovkMolk/KovkMolk/png/' + filename + '.png')
 
             # Close the plot
             plt.close()
 
-            logger.info("A test chart was successfully drawn.")
+            logger.info("A weather data chart was successfully drawn.")
 
             def count_charts_drawn(log_file):
                 with open(log_file, 'r') as file:
                     lines = file.readlines()
-                count = sum("A test chart was successfully drawn." in line for line in lines)
+                count = sum("A weather data chart was successfully drawn." in line for line in lines)
                 return count
             
             charts_drawn = count_charts_drawn("parser.log")
