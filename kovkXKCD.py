@@ -229,8 +229,10 @@ def create_chart():
             ax2.tick_params(axis='y', labelsize='medium', labelcolor='black')  # Update font size and color for wind speed here
             
             # Save the plot as an image
-            
-            filename = 'weather_data_chart_' + str(uuid.uuid4())
+            if not os.path.exists('/home/KovkMolk/KovkMolk/png'):
+                os.makedirs('/home/KovkMolk/KovkMolk/png')
+
+            filename = 'kovk_weather_chart_' + str(uuid.uuid4())
             plt.tight_layout()
             plt.savefig('/home/KovkMolk/KovkMolk/png/' + filename + '.png')
 

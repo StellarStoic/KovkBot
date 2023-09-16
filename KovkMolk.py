@@ -176,7 +176,7 @@ nevede presekal/a Kovk molk \n\nStanje zraƒçne mase na kovku je pa trenutno tak≈
         chart_filename = create_chart()
         time.sleep(3)
         try:
-            with open(f'{chart_filename}.png', 'rb') as file:
+            with open(f'/home/KovkMolk/KovkMolk/png/{chart_filename}.png', 'rb') as file:
                 context.bot.send_photo(chat_id=MAIN_GROUP_CHAT_ID, photo=file)
         except FileNotFoundError as e:
             logger.error(f"File not found: {e}")
