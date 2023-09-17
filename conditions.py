@@ -118,7 +118,7 @@ class ConditionChecker:
 
     # check_wind_speed_range_14_100: The loop breaks after adding the first comment when the wind speed is in the range of 9 - 12 m/s and wind gusts are below 12 m/s for a certain number of points.
     # Method to check if the wind speed is in the range of 14 - 100 m/s and wind gusts are below 12 m/s for a certain number of points
-    def check_wind_speed_range_14_100(self, num_points=13):
+    def check_wind_speed_range_14_100(self, num_points=16):
         lower_wind_speed_limit = 14
         upper_wind_speed_limit = 100
         counter = 0  # Initialize a counter
@@ -140,7 +140,7 @@ class ConditionChecker:
 
     # check_constant_wind_speed_range_0_2: The loop breaks after adding the first comment when the wind speed is constant in the range of 0 - 2 m/s for a certain number of points.
     # Method to check if the wind speed is constant in the range of 0 - 2 m/s for a certain number of points
-    def check_constant_wind_speed_range_0_2(self, num_points=9):
+    def check_constant_wind_speed_range_0_2(self, num_points=16):
         lower_wind_speed_limit = 0
         upper_wind_speed_limit = 2
         counter = 0  # Initialize a counter
@@ -178,7 +178,7 @@ class ConditionChecker:
 
     # check_persistent_low_temperature: The loop breaks after adding the first comment when the temperature is below zero for a certain period of time.
     # Method to check if the temperature is below zero for a certain period of time
-    def check_persistent_low_temperature(self, period=5):
+    def check_persistent_low_temperature(self, period=16):
         count = 0  # Initialize a counter
         # Iterate over the temperature data
         for i, temp in enumerate(self.temperature):
