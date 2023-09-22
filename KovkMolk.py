@@ -120,7 +120,7 @@ def handle_message(update: Update, context: CallbackContext):
             logger.error(f"Unexpected error: {e}")
             logger.error(traceback.format_exc())  # This will print the stack trace to your log   
             
-    if time_since_last_mention >= datetime.timedelta(minutes=29): # Bot silence period after responding with a message
+    if time_since_last_mention >= datetime.timedelta(minutes=120): # Bot silence period after responding with a message
         
         if time_passed > longest_duration:
             longest_silence_start = longest_silence_end  # Move longest_silence end into longest silence start
