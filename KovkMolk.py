@@ -159,17 +159,17 @@ def handle_message(update: Update, context: CallbackContext):
 
             
             # Comment if the record was broken
-            context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je natanko {formatted_time_passed} odkar je {pre_last_mentioner} nazadnje presekal/a Kovk molk. Po zelo dolgem času je sedaj to nevede storil/a tudi {last_mentioner}. Kovk molk je bil presežen za \
-{format_timedelta(longest_duration - old_longest_duration)} tako, da sedaj {last_mentioner} zaseda mesto podiralca rekordov Kovk molka, katerega si je poprej lastil/a {old_longest_silence_breaker}. \
-Čestitke za ta za vse nas skrajno nepomemben dosežek. 🏆 \
+            context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je natanko {formatted_time_passed} od zadnje omembe Kovka. Do sedaj najdaljši Kovk molk je bil presežen za \
+{format_timedelta(longest_duration - old_longest_duration)}. \
+\nČestitke, imamo nov rekord. 🏆 \
 \n\nKovk molk je trajal vse od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} pa do danes \
 {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')} \n\nSeveda pa kot vedno, nagrada sledi v slikovni prezentaciji stanja zračne mase na Kovku")
 
             # Comment if the record has not been broken
         else:
-            context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je točno {formatted_time_passed} odkar je {pre_last_mentioner} presekal/a Kovk molk.\n\nKot zanimivost, najdaljši Kovk molk je trajal presenetljivih \
+            context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je točno {formatted_time_passed} od zadnje omembe Kovka.\n\nKot zanimivost, najdaljši Kovk molk je trajal presenetljivih \
 {format_timedelta(old_longest_duration)}, od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} \
-pa vse tja do {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')}, ko je {longest_silence_breaker} \
+pa vse tja do {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')}, ko je tisti nekdo \
 nevede presekal/a Kovk molk \n\nStanje zračne mase na kovku je pa trenutno takšno...")
 
         # Create a chart and send it as a photo
