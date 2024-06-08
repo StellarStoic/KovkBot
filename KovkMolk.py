@@ -16,7 +16,7 @@ import traceback
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.CRITICAL, #level=logging.DEBUG,
+    level=logging.DEBUG, #level=logging.DEBUG,
     filename='/home/bots/KovkMolk/bot.log'
 )
 
@@ -24,10 +24,10 @@ logger = logging.getLogger(__name__)
 
 warnings.filterwarnings("ignore", category=matplotlib.MatplotlibDeprecationWarning)
 
-load_dotenv()  # load environment variables from .env file
-TOKEN = os.getenv("TELEGRAM_TOKEN")  # get token from .env file
-SILENT_GROUP_CHAT_ID = int(os.getenv("SILENT_GROUP_CHAT_ID"))  # get silent group chat ID from .env file
-MAIN_GROUP_CHAT_ID = int(os.getenv("MAIN_GROUP_CHAT_ID"))  # get main group chat ID from .env file
+load_dotenv('/home/bots/KovkMolk/.env')  # Load environment variables from .env file
+TOKEN = os.getenv("TELEGRAM_TOKEN")  # Get token from .env file
+SILENT_GROUP_CHAT_ID = int(os.getenv("SILENT_GROUP_CHAT_ID"))  # Get silent group chat ID from .env file
+MAIN_GROUP_CHAT_ID = int(os.getenv("MAIN_GROUP_CHAT_ID"))  # Get main group chat ID from .env file
 
 def format_timedelta(td):
     minutes, seconds = divmod(td.seconds, 60)
@@ -86,13 +86,13 @@ def handle_message(update: Update, context: CallbackContext):
         return
 
     forms_of_kovk = ["kovk", "kovku", "kovkom", "kovka", "kowk", "nakovk", "dokovka", "nakovku", 
-                        "podkovkom", "zakovkom", "okovku","covk", "kovki", "kovc", "cowk", "cowku",
-                        "covku", "kvoekom", "kovkkom", "kobk", "kovlom", "covkom", "kowku", 
-                        "kvoeka", "kovko", "kovla", "covka", "nakov", "nakovl", "nacovk", "jovk", 
-                        "kouk", "kvok", "kwok", "kvoku", "kwoku"]
+                        "podkovkom", "zakovkom", "okovku","covk", "kovki",
+                        "covku", "kvoekom", "kovkkom", "kobk", "kovlom", "covkom", "kwok", 
+                        "kvoeka", "kovko", "kovla", "covka", "nakov", "nakovl", "nacovk", "jovk", "kovc", 
+                        "kouk"]
 
     # Wait for some time
-    time.sleep(3)
+    time.sleep(5)
     
     # Initialize with a message
     time_from_latest_station_data = ""
@@ -123,10 +123,10 @@ def handle_message(update: Update, context: CallbackContext):
             logger.error(f"Unexpected error: {e}")
             logger.error(traceback.format_exc())  # This will print the stack trace to your log   
             
-    if time_since_last_mention >= datetime.timedelta(minutes=120): # Bot silence period after responding with a message
+    if time_since_last_mention >= datetime.timedelta(minutes=1): # Bot silence period after responding with a message
         
         time_from_latest_station_data = get_data_freshness_message()  # Get the data freshness message
-
+        
         if time_passed > longest_duration:
             longest_silence_start = longest_silence_end  # Move longest_silence end into longest silence start
             longest_duration = time_passed # Update longest_duration
@@ -164,17 +164,16 @@ def handle_message(update: Update, context: CallbackContext):
 
             
             # Comment if the record was broken
-            context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je natanko {formatted_time_passed} od zadnje omembe Kovka. Do sedaj najdaljši Kovk molk je bil presežen za \
-{format_timedelta(longest_duration - old_longest_duration)}. \
-\nČestitke, imamo nov rekord Kovk Molka. 🏆 \
+            context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je natanko {formatted_time_passed} odkar je @{pre_last_mentioner} nazadnje presekal/a Kovk molk. Sedaj je pa @{last_mentioner} presegel Kovk molk rekord, za \
+{format_timedelta(longest_duration - old_longest_duration)} in tako zasedel mesto, ki si ga je poprej lastil @{old_longest_silence_breaker}. Čestitke za ta nepomemben dosežek 🏆 \
 \n\nKovk molk je trajal vse od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} pa do danes \
 {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')}")
 
             # Comment if the record has not been broken
         else:
-            context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je točno {formatted_time_passed} od zadnje omembe Kovka.\n\nKot zanimivost, najdaljši Kovk molk je trajal presenetljivih \
+            context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je točno {formatted_time_passed} odkar je {pre_last_mentioner} presekal/a Kovk molk.\n\nKot zanimivost, najdaljši Kovk molk je trajal presenetljivih \
 {format_timedelta(old_longest_duration)}, od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} \
-pa vse tja do {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')}, ko je tisti nekdo \
+pa vse tja do {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')}, ko je {longest_silence_breaker} \
 nevede presekal/a Kovk molk.")
 
         # Create a chart and send it as a photo
@@ -193,7 +192,6 @@ nevede presekal/a Kovk molk.")
 
         # Add a message about the data freshness after posting the chart image
         context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Zadnji podatki iz VP Kovk so bili osveženi pred {time_from_latest_station_data}")
-
 
 def main():
     updater = Updater(token=TOKEN, use_context=True)

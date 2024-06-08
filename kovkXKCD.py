@@ -3,16 +3,18 @@ matplotlib.use('Agg')  # Use a non-GUI backend
 import matplotlib.pyplot as plt
 import numpy as np
 import logging
+import random
 import json
 import requests
+import time
 import re
 import os
 import uuid
-from conditions import ConditionChecker
+from conditions import ConditionChecker  # Ensure this module is in the same directory or accessible in your PYTHONPATH
 from datetime import datetime, timedelta
 
 # Create a logger for this module
-logger = logging.getLogger('/home/bots/KovkMolk/kovkXKCD')
+logger = logging.getLogger('kovkXKCD')
 logger.setLevel(logging.INFO)
 
 # Create a file handler for this logger
@@ -111,7 +113,6 @@ def get_data_freshness_message():
     minutes, _ = divmod(remainder, 60)
     return f"{int(hours)} h {int(minutes)} m"
 
-
 def create_chart():
     # Fetch fresh weather data
     time_data, wind_speed, wind_gusts, wind_direction, temperature, latest_data_time = fetch_weather_data(api_url)
@@ -186,7 +187,7 @@ def create_chart():
             ax2.text(i, wind_direction_visual[i], txt, ha='center', va='center', rotation=45, fontsize='x-small', zorder=1)
 
         # Plot temperature on the primary y-axis
-        line1, = ax1.plot(time_data, temperature, label='Temperatura', color='lightgrey', linestyle='dotted',zorder=1)
+        line1, = ax1.plot(time_data, temperature, label='Temperatura', color='lightgrey', linestyle='dotted', zorder=1)
 
         # Plot wind speed on the secondary y-axis
         line2, = ax2.plot(time_data, wind_speed, label='Hitrost vetra', color='tab:blue', zorder=1)
@@ -266,10 +267,9 @@ def create_chart():
         if not os.path.exists('/home/bots/KovkMolk/png'):
             os.makedirs('/home/bots/KovkMolk/png')
 
-        # Save the plot as an image
-        filename = 'Kovk_weather_chart_' + str(uuid.uuid4())
+        filename = 'test_weather_chart_' + str(uuid.uuid4())
         plt.tight_layout()
-        plt.savefig('/home/bots/KovkMolk/png/' + filename + '.png')
+        plt.savefig(f'/home/bots/KovkMolk/png/{filename}.png')
 
         # Close the plot
         plt.close()
@@ -279,7 +279,7 @@ def create_chart():
         def count_charts_drawn(log_file):
             with open(log_file, 'r') as file:
                 lines = file.readlines()
-            count = sum("A chart was successfully drawn." in line for line in lines)
+            count = sum("A test chart was successfully drawn." in line for line in lines)
             return count
         
         charts_drawn = count_charts_drawn("/home/bots/KovkMolk/parser.log")
