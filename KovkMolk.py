@@ -16,7 +16,7 @@ import traceback
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.DEBUG, #level=logging.DEBUG,
+    level=logging.CRITICAL, #level=logging.DEBUG,
     filename='/home/bots/KovkMolk/bot.log'
 )
 
@@ -164,16 +164,16 @@ def handle_message(update: Update, context: CallbackContext):
 
             
             # Comment if the record was broken
-            context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je natanko {formatted_time_passed} odkar je @{pre_last_mentioner} nazadnje presekal/a Kovk molk. Sedaj je pa @{last_mentioner} presegel Kovk molk rekord, za \
-{format_timedelta(longest_duration - old_longest_duration)} in tako zasedel mesto, ki si ga je poprej lastil @{old_longest_silence_breaker}. Čestitke za ta nepomemben dosežek 🏆 \
+            context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je natanko {formatted_time_passed} odkar je tisti nekdo nazadnje presekal/a Kovk molk. Sedaj je pa točno ta nekdo presegel Kovk molk rekord, za \
+{format_timedelta(longest_duration - old_longest_duration)} in tako zasedel mesto, ki si ga je poprej lastil nekdo drug kot Zisti Nekdo. Čestitke za ta nepomemben dosežek 🏆 \
 \n\nKovk molk je trajal vse od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} pa do danes \
 {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')}")
 
             # Comment if the record has not been broken
         else:
-            context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je točno {formatted_time_passed} odkar je {pre_last_mentioner} presekal/a Kovk molk.\n\nKot zanimivost, najdaljši Kovk molk je trajal presenetljivih \
+            context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je točno {formatted_time_passed} od zadnje omembe Kovka.\n\nKot zanimivost, najdaljši Kovk molk je trajal presenetljivih \
 {format_timedelta(old_longest_duration)}, od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} \
-pa vse tja do {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')}, ko je {longest_silence_breaker} \
+pa vse tja do {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')}, ko je Tisti Nekdo \
 nevede presekal/a Kovk molk.")
 
         # Create a chart and send it as a photo
