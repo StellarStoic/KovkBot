@@ -8,8 +8,7 @@ from dotenv import load_dotenv
 import json
 import logging
 from telegram.error import NetworkError, TelegramError
-from kovkXKCD import create_chart  # Import the create_chart function
-import time
+from kovkXKCD import create_chart, get_data_freshness_message  # Import the create_chart and get_data_freshness_message functions
 import warnings
 import matplotlib
 import traceback
@@ -92,7 +91,10 @@ def handle_message(update: Update, context: CallbackContext):
                         "kouk", "kvok", "kwok", "kvoku", "kwoku"]
 
     # Wait for some time
-    time.sleep(2)
+    time.sleep(3)
+    
+    # Initialize with a message
+    time_from_latest_station_data = ""
 
     if any(form in message for form in forms_of_kovk):
         now = datetime.datetime.now()
@@ -122,6 +124,8 @@ def handle_message(update: Update, context: CallbackContext):
             
     if time_since_last_mention >= datetime.timedelta(minutes=120): # Bot silence period after responding with a message
         
+        time_from_latest_station_data = get_data_freshness_message()  # Get the data freshness message
+
         if time_passed > longest_duration:
             longest_silence_start = longest_silence_end  # Move longest_silence end into longest silence start
             longest_duration = time_passed # Update longest_duration
@@ -161,16 +165,16 @@ def handle_message(update: Update, context: CallbackContext):
             # Comment if the record was broken
             context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je natanko {formatted_time_passed} od zadnje omembe Kovka. Do sedaj najdaljši Kovk molk je bil presežen za \
 {format_timedelta(longest_duration - old_longest_duration)}. \
-\nČestitke, imamo nov rekord. 🏆 \
+\nČestitke, imamo nov rekord Kovk Molka. 🏆 \
 \n\nKovk molk je trajal vse od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} pa do danes \
-{longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')} \n\nSeveda pa kot vedno, nagrada sledi v slikovni prezentaciji stanja zračne mase na Kovku")
+{longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')}")
 
             # Comment if the record has not been broken
         else:
             context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Minilo je točno {formatted_time_passed} od zadnje omembe Kovka.\n\nKot zanimivost, najdaljši Kovk molk je trajal presenetljivih \
 {format_timedelta(old_longest_duration)}, od {longest_silence_start.strftime('%d. %m.%Y %H:%M:%S')} \
 pa vse tja do {longest_silence_end.strftime('%d. %m.%Y %H:%M:%S')}, ko je tisti nekdo \
-nevede presekal/a Kovk molk \n\nStanje zračne mase na kovku je pa trenutno takšno...")
+nevede presekal/a Kovk molk.")
 
         # Create a chart and send it as a photo
         chart_filename = create_chart()
@@ -185,6 +189,10 @@ nevede presekal/a Kovk molk \n\nStanje zračne mase na kovku je pa trenutno tak�
         except Exception as e:
             logger.error(f"Unexpected error: {e}")
             logger.error(traceback.format_exc())
+
+        # Add a message about the data freshness after posting the chart image
+        context.bot.send_message(chat_id=MAIN_GROUP_CHAT_ID, text=f"Zadnji podatki iz VP Kovk so bili osveženi pred {time_from_latest_station_data}")
+
 
 def main():
     updater = Updater(token=TOKEN, use_context=True)
