@@ -10,13 +10,14 @@ import logging
 from telegram.error import NetworkError, TelegramError
 from kovkXKCD import create_chart, get_data_freshness_message  # Import the create_chart and get_data_freshness_message functions
 import warnings
+import time
 import matplotlib
 import traceback
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.CRITICAL, #level=logging.DEBUG,
-    filename='/home/KovkMolk/KovkMolk/bot.log'
+    filename='/home/bots/KovkMolk/bot.log'
 )
 
 logger = logging.getLogger(__name__)
@@ -34,21 +35,21 @@ def format_timedelta(td):
     return f"{td.days} dni, {hours} ur in {minutes} minut"
 
 try:
-    with open('/home/KovkMolk/KovkMolk/last_mentioner.json', 'r') as f:
+    with open('/home/bots/KovkMolk/last_mentioner.json', 'r') as f:
         last_mentioner = f.read().strip()
-    with open('/home/KovkMolk/KovkMolk/pre_last_mentioner.json', 'r') as f:
+    with open('/home/bots/KovkMolk/pre_last_mentioner.json', 'r') as f:
         pre_last_mentioner = f.read().strip()
-    with open('/home/KovkMolk/KovkMolk/longest_duration.json', 'r') as f:
+    with open('/home/bots/KovkMolk/longest_duration.json', 'r') as f:
         longest_duration = datetime.timedelta(seconds=json.load(f))
-    with open('/home/KovkMolk/KovkMolk/last_mention.json', 'r') as f:
+    with open('/home/bots/KovkMolk/last_mention.json', 'r') as f:
         last_mention = datetime.datetime.fromisoformat(f.read().strip())
-    with open('/home/KovkMolk/KovkMolk/longest_silence_start.json', 'r') as f:
+    with open('/home/bots/KovkMolk/longest_silence_start.json', 'r') as f:
         longest_silence_start = datetime.datetime.fromisoformat(f.read().strip())
-    with open('/home/KovkMolk/KovkMolk/longest_silence_end.json', 'r') as f:
+    with open('/home/bots/KovkMolk/longest_silence_end.json', 'r') as f:
         longest_silence_end = datetime.datetime.fromisoformat(f.read().strip())
-    with open('/home/KovkMolk/KovkMolk/longest_silence_breaker.json', 'r') as f:
+    with open('/home/bots/KovkMolk/longest_silence_breaker.json', 'r') as f:
         longest_silence_breaker = f.read()
-    with open('/home/KovkMolk/KovkMolk/old_longest_silence_breaker.json', 'r') as f:
+    with open('/home/bots/KovkMolk/old_longest_silence_breaker.json', 'r') as f:
         old_longest_silence_breaker = f.read()
         
 except FileNotFoundError as e:
@@ -107,12 +108,12 @@ def handle_message(update: Update, context: CallbackContext):
         pre_last_mentioner = last_mentioner # Save the previous last_mentioner
         last_mentioner = update.message.from_user.username # Update the current last_mentioner
         try:
-            with open('/home/KovkMolk/KovkMolk/last_mention.json', 'w') as f: # Save the new last mention to a file
+            with open('/home/bots/KovkMolk/last_mention.json', 'w') as f: # Save the new last mention to a file
                 f.write(now.isoformat())
             last_mentioner = user  # Save the username of the user who last mentioned the keyword
-            with open('/home/KovkMolk/KovkMolk/last_mentioner.json', 'w') as f:  # Save the last mentioner to a file
+            with open('/home/bots/KovkMolk/last_mentioner.json', 'w') as f:  # Save the last mentioner to a file
                 f.write(last_mentioner)
-            with open('/home/KovkMolk/KovkMolk/pre_last_mentioner.json', 'w') as f:  # Save the pre_last mentioner to a file
+            with open('/home/bots/KovkMolk/pre_last_mentioner.json', 'w') as f:  # Save the pre_last mentioner to a file
                 f.write(pre_last_mentioner)
         except FileNotFoundError as e:
             logger.error(f"File not found: {e}")
@@ -136,22 +137,22 @@ def handle_message(update: Update, context: CallbackContext):
             try:
                 # Save the new longest duration, silence times, and old breaker to files...
                 last_mention = now # Update the last mention after checking if the silence was the longest
-                with open('/home/KovkMolk/KovkMolk/last_mention.json', 'w') as f: # Save the new last mention to a file
+                with open('/home/bots/KovkMolk/last_mention.json', 'w') as f: # Save the new last mention to a file
                     f.write(now.isoformat())
                 last_mentioner = user  # Save the username of the user who last mentioned the keyword
-                with open('/home/KovkMolk/KovkMolk/last_mentioner.json', 'w') as f:  # Save the last mentioner to a file
+                with open('/home/bots/KovkMolk/last_mentioner.json', 'w') as f:  # Save the last mentioner to a file
                     f.write(last_mentioner)
-                with open('/home/KovkMolk/KovkMolk/pre_last_mentioner.json', 'w') as f:  # Save the pre_last mentioner to a file
+                with open('/home/bots/KovkMolk/pre_last_mentioner.json', 'w') as f:  # Save the pre_last mentioner to a file
                     f.write(pre_last_mentioner)
-                with open('/home/KovkMolk/KovkMolk/longest_duration.json', 'w') as f:
+                with open('/home/bots/KovkMolk/longest_duration.json', 'w') as f:
                     json.dump(longest_duration.total_seconds(), f)
-                with open('/home/KovkMolk/KovkMolk/longest_silence_start.json', 'w') as f:
+                with open('/home/bots/KovkMolk/longest_silence_start.json', 'w') as f:
                     f.write(longest_silence_start.isoformat())
-                with open('/home/KovkMolk/KovkMolk/longest_silence_end.json', 'w') as f:
+                with open('/home/bots/KovkMolk/longest_silence_end.json', 'w') as f:
                     f.write(longest_silence_end.isoformat())
-                with open('/home/KovkMolk/KovkMolk/longest_silence_breaker.json', 'w') as f:
+                with open('/home/bots/KovkMolk/longest_silence_breaker.json', 'w') as f:
                     f.write(longest_silence_breaker)
-                with open('/home/KovkMolk/KovkMolk/old_longest_silence_breaker.json', 'w') as f:  # Save the old breaker to a file
+                with open('/home/bots/KovkMolk/old_longest_silence_breaker.json', 'w') as f:  # Save the old breaker to a file
                     f.write(old_longest_silence_breaker)     
             except FileNotFoundError as e:
                 logger.error(f"File not found: {e}")
@@ -180,7 +181,7 @@ nevede presekal/a Kovk molk.")
         chart_filename = create_chart()
         time.sleep(3)
         try:
-            with open(f'/home/KovkMolk/KovkMolk/png/{chart_filename}.png', 'rb') as file:
+            with open(f'/home/bots/KovkMolk/png/{chart_filename}.png', 'rb') as file:
                 context.bot.send_photo(chat_id=MAIN_GROUP_CHAT_ID, photo=file)
         except FileNotFoundError as e:
             logger.error(f"File not found: {e}")
